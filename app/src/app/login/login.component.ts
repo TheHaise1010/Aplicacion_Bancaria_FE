@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { CredencialesService, LoginResponse } from '../services/credenciales.service';
 
 @Component({
   standalone: true,
-  selector: 'app-login',
-  templateUrl: './login.component.html',
+  selector: 'app-login',  templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   imports: [ReactiveFormsModule, CommonModule]
 })
@@ -13,38 +13,46 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   formSubmitted = false; // Variable para rastrear si el formulario fue enviado
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private credService: CredencialesService) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, this.customEmailValidator, Validators.maxLength(25)]],
-      password: ['', [Validators.required, Validators.maxLength(10)]]
+      correo: ['', [Validators.required, this.customEmailValidator, Validators.maxLength(25)]],
+      contrasena: ['', [Validators.required, Validators.maxLength(10)]]
     });
   }
 
   login(): void {
-    this.formSubmitted = true; // Marca el formulario como enviado
     if (this.loginForm.invalid) {
-      return; // No realiza la lógica de login si el formulario es inválido
+      this.loginForm.markAllAsTouched();
+      return;
     }
 
-    const { email, password } = this.loginForm.value;
+    const { correo, contrasena } = this.loginForm.value;
 
-    if (email === 'ejemplo@ejemplo.com' && password === '123456') {
-      alert('Login exitoso');
-      this.loginForm.reset();
-      this.formSubmitted = false; // Reinicia la variable después de un login exitoso
-    } else {
-      alert('Login fallido');
-    }
+    this.credService.login(correo, contrasena).subscribe({
+      next: (res: LoginResponse) => {
+        if (res.success) {
+          alert('Login exitoso' + (res.message ? `: ${res.message}` : ''));
+          this.loginForm.reset();
+          // aquí podrías guardar el token: localStorage.setItem('token', res.token!)
+        } else {
+          alert('Login fallido' + (res.message ? `: ${res.message}` : ''));
+        }
+      },
+      error: err => {
+        console.error('Error en petición de login', err);
+        alert('Ocurrió un error al contactar al servidor.');
+      }
+    });
   }
 
   get emailControl() {
-    return this.loginForm.get('email');
+    return this.loginForm.get('correo');
   }
 
   get passwordControl() {
-    return this.loginForm.get('password');
+    return this.loginForm.get('contrasena');
   }
 
   //Utilizando una expresión regular para validar el formato del email
