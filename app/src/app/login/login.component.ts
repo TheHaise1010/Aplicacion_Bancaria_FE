@@ -29,15 +29,15 @@ export class LoginComponent implements OnInit {
     }
 
     const { correo, contrasena } = this.loginForm.value;
-
+    console.log('Valor del formulario antes de enviar:', { correo, contrasena }); // Agrega esta línea
     this.credService.login(correo, contrasena).subscribe({
       next: (res: LoginResponse) => {
         if (res.success) {
-          alert('Login exitoso' + (res.message ? `: ${res.message}` : ''));
+          alert('Login exitoso');
           this.loginForm.reset();
-          // aquí podrías guardar el token: localStorage.setItem('token', res.token!)
+          // aquí se podria guardar el token: localStorage.setItem('token', res.token!)
         } else {
-          alert('Login fallido' + (res.message ? `: ${res.message}` : ''));
+          alert('Login fallido');
         }
       },
       error: err => {
