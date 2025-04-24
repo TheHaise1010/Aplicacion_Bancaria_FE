@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CredencialesService, LoginResponse } from '../services/credenciales.service';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -13,7 +14,7 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   formSubmitted = false; // Variable para rastrear si el formulario fue enviado
 
-  constructor(private fb: FormBuilder, private credService: CredencialesService) { }
+  constructor(private fb: FormBuilder, private credService: CredencialesService, private router: Router) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -29,13 +30,18 @@ export class LoginComponent implements OnInit {
     }
 
     const { correo, contrasena } = this.loginForm.value;
-    console.log('Valor del formulario antes de enviar:', { correo, contrasena }); // Agrega esta línea
     this.credService.login(correo, contrasena).subscribe({
       next: (res: LoginResponse) => {
         if (res.success) {
-          alert('Login exitoso');
+          if (res.tipoUsuario === 'cliente') {
+            // Redirige al componente ClienteComponent
+            this.router.navigate(['cliente'])
+              .then(() => console.log('Navegado a cliente')); // Opcional: confirmación
+          } else {
+            // Lógica para otros tipos de usuario
+            console.warn('Tipo de usuario no cliente:', res.tipoUsuario);
+          }
           this.loginForm.reset();
-          // aquí se podria guardar el token: localStorage.setItem('token', res.token!)
         } else {
           alert('Login fallido');
         }
@@ -46,6 +52,7 @@ export class LoginComponent implements OnInit {
       }
     });
   }
+
 
   get emailControl() {
     return this.loginForm.get('correo');

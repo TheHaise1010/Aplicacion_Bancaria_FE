@@ -1,18 +1,13 @@
-import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
+import {Routes} from '@angular/router';
+import {LoginComponent} from './login/login.component';
+import {ClienteComponent} from './cliente/cliente.component';
 
 export const routes: Routes = [
   {
-    path: 'login',
+    path: '',
     component: LoginComponent
   },
-  {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
-  },
-  {
-    path: '**',
-    redirectTo: 'login'
+ {
+    path: 'cliente', component: ClienteComponent
   }
 ];
