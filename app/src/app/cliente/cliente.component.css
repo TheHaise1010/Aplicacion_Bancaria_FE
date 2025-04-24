@@ -1,0 +1,77 @@
+/* Estilos básicos para la sección de mensajes */
+.alert {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.alert-success {
+  color: #3c763d;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+
+.alert-danger {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+
+/* Estilos para la lista de cuentas */
+ul {
+  list-style: none; /* Remueve los puntos de la lista */
+  padding: 0;
+}
+
+li {
+  background-color: #f9f9f9;
+  margin-bottom: 5px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Estilos para el área de transacciones */
+/* Estilos para los botones */
+button {
+  margin-right: 10px;
+  padding: 8px 15px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #e0e0e0;
+}
+
+button:hover:not(:disabled) {
+  background-color: #d5d5d5;
+}
+
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Estilos básicos para elementos de formulario */
+label {
+  display: inline-block; /* Hace que la etiqueta no ocupe todo el ancho */
+  margin-bottom: 5px;
+  font-weight: bold;
+  margin-right: 10px; /* Espacio a la derecha de la etiqueta */
+}
+
+select, input[type="number"] {
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: inline-block; /* Mantenerlos en línea con la etiqueta */
+  width: 150px; /* Ancho de ejemplo */
+  box-sizing: border-box; /* Incluir padding y borde en el ancho */
+}
+
+/* Ajuste para el contenedor de los botones si necesitas espaciado */
+div {
+  margin-bottom: 10px;
+}

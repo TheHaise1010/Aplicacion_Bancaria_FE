@@ -1,1 +1,42 @@
-<p>cliente works!</p>
+<h2>Panel de Cliente - DUI: {{ clientDui }}</h2>
+
+<div *ngIf="message" [ngClass]="{'alert': true, 'alert-success': messageType === 'success', 'alert-danger': messageType === 'error'}">
+  {{ message }}
+</div>
+
+<h3>Mis Cuentas:</h3>
+
+<div *ngIf="isLoading && cuentas.length === 0">Cargando cuentas...</div>
+
+<div *ngIf="!isLoading && cuentas.length === 0 && !message">No se encontraron cuentas para este cliente.</div>
+
+<ul *ngIf="cuentas.length > 0">
+  <li *ngFor="let cuenta of cuentas">
+    Número: {{ cuenta.numero }} - Saldo: {{ cuenta.saldo | currency:'USD':'symbol':'1.2-2' }} </li>
+</ul>
+
+<h3>Realizar Transacción:</h3>
+
+<div>
+  <label for="cuentaSelect">Seleccione Cuenta:</label>
+  <select id="cuentaSelect" [(ngModel)]="selectedCuentaNumero" [disabled]="isLoading || cuentas.length === 0">
+    <option value="" disabled>-- Seleccione --</option> <option *ngFor="let cuenta of cuentas" [value]="cuenta.numero">
+    {{ cuenta.numero }} (Saldo: {{ cuenta.saldo | currency:'USD':'symbol':'1.2-2' }})
+  </option>
+  </select>
+</div>
+
+<div>
+  <label for="montoInput">Monto:</label>
+  <input id="montoInput" type="number" [(ngModel)]="transactionAmount" [disabled]="isLoading" min="0.01"> </div>
+
+<div>
+  <button (click)="performTransaction('abonar')" [disabled]="isLoading || !selectedCuentaNumero || (transactionAmount === null || transactionAmount <= 0)">
+    Abonar
+  </button>
+  <button (click)="performTransaction('retirar')" [disabled]="isLoading || !selectedCuentaNumero || (transactionAmount === null || transactionAmount <= 0)">
+    Retirar
+  </button>
+</div>
+
+<div *ngIf="isLoading">Procesando operación...</div>
