@@ -92,18 +92,14 @@ export class ClienteComponent implements OnInit {
       ? this.bancoService.abonar(this.clientDui, this.selectedCuentaNumero, this.transactionAmount)
       : this.bancoService.retirar(this.clientDui, this.selectedCuentaNumero, this.transactionAmount);
 
-    // Suscríbete al observable para manejar la respuesta
+    // Suscribe al observable para manejar la respuesta
     transactionObservable.subscribe({
       next: (response: ApiResponse<Cuenta>) => { // Las respuestas de transacción devuelven ApiResponse<Cuenta>
         this.isLoading = false; // Termina de cargar
         if (response.success) {
           this.showMessage(response.message, 'success'); // Muestra el mensaje de éxito del backend
           this.transactionAmount = null; // Limpia el campo de monto
-          // La forma más simple de asegurar que el saldo se actualice en la vista
-          // es recargar la lista completa de cuentas.
           this.loadCuentas();
-          // Alternativamente, podrías actualizar solo el saldo de la cuenta específica
-          // this.updateAccountBalance(response.data?.numero, response.newSaldo || response.data?.saldo);
         } else {
           // Si success es false, muestra el mensaje de error del backend
           this.showMessage(response.message, 'error');
@@ -126,22 +122,6 @@ export class ClienteComponent implements OnInit {
   showMessage(msg: string, type: 'success' | 'error'): void {
     this.message = msg;
     this.messageType = type;
-    // Opcional: Añadir un temporizador para que el mensaje desaparezca automáticamente después de unos segundos
-    // setTimeout(() => { this.message = null; this.messageType = null; }, 5000); // 5000 ms = 5 segundos
   }
 
-  // Método alternativo para actualizar el saldo de una sola cuenta en la lista (en lugar de recargar todas)
-  // updateAccountBalance(accountNumber?: string, newBalance?: number): void {
-  //    if (accountNumber != null && newBalance != null) {
-  //      const accountIndex = this.cuentas.findIndex(c => c.numero === accountNumber);
-  //      if (accountIndex !== -1) {
-  //        // Crea una nueva lista de cuentas para asegurar que Angular detecte el cambio
-  //        this.cuentas = [
-  //          ...this.cuentas.slice(0, accountIndex), // Elementos antes de la cuenta
-  //          { ...this.cuentas[accountIndex], saldo: newBalance }, // Cuenta actualizada
-  //          ...this.cuentas.slice(accountIndex + 1) // Elementos después de la cuenta
-  //        ];
-  //      }
-  //    }
-  // }
 }

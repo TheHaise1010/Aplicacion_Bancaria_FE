@@ -8,7 +8,6 @@ export interface Cuenta {
   id: number;
   numero: string;
   saldo: number;
-  // clienteDui podría venir embebido en la entidad, pero no lo usamos aquí
 }
 
 /** Respuesta genérica del backend */

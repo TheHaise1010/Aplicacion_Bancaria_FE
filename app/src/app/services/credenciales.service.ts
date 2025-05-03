@@ -21,7 +21,6 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class CredencialesService {
-  // Ajusta esta URL base según tu configuración de entorno
   private baseUrl = 'http://localhost:8080/api/credenciales';
   constructor(private http: HttpClient) {}
 
